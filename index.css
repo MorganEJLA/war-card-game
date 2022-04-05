@@ -50,6 +50,9 @@ button#new-deck {
   align-self: flex-start;
 }
 
+img.card {
+  width: 100%;
+}
 #cards {
   display: flex;
   flex-direction: column;
