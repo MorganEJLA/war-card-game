@@ -17,6 +17,10 @@ function handleClick(){
         remainingText.textContent = `Remaining cards ${data.remaining}`
         deckId = data.deck_id
         console.log(deckId)
+        drawCard.disabled = false;
+        
+       
+        
      })
 }
 
@@ -37,7 +41,31 @@ drawCard.addEventListener("click", () =>{
 
             if (data.remaining === 0){
                 drawCard.disabled = true;
+                if(computerScore > yourScore){
+                    header.textContent = "The Computer Won the Game!"
+                    
+                    
+                   
+                }else if(
+                    yourScore > computerScore){
+                    header.textContent = "You Won the Game!"
+                   
+                   
+                    }
+                else{
+                    header.textContent = "It's a tie!"
+                   
+                    
+                }
+                resetGame();
+               
+                
+               
+                
+
+                
             }
+            
 
         })
 
@@ -63,7 +91,18 @@ function determineCardWinner(card1, card2){
         return "War!"
     // messageEl.textContent = message;
     }
+   
 }
+
+function resetGame(){
+    yourScore = 0;
+    computerScore = 0;
+   
+
+}
+
+
+
 
 // const card1Obj = {
 //     value: "7"
