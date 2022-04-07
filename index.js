@@ -9,68 +9,58 @@ const header = document.getElementById("header");
 const remainingText = document.getElementById("remaining");
 const computerScoreEl = document.getElementById("computer-score");
 const yourScoreEl = document.getElementById("your-score");
-function handleClick(){
-    fetch("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
-        
-        .then(res => res.json())
-        .then(data => {console.log(data)
-        remainingText.textContent = `Remaining cards ${data.remaining}`
-        deckId = data.deck_id
-        console.log(deckId)
-        drawCard.disabled = false;
+
+async function handleClick(){
+   const res =  await fetch("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
+   const data = await res.json ()
+   remainingText.textContent = `Remaining cards ${data.remaining}`
+    deckId = data.deck_id
+    console.log(deckId)
+    drawCard.disabled = false;
         
        
         
-     })
-}
+     }
+
 
 
 
 newDeck.addEventListener("click", handleClick)
-drawCard.addEventListener("click", () =>{
-    fetch(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`)
-        .then(res =>res.json())
-        .then(data => {
-            remainingText.textContent = `Remaining cards ${data.remaining}`
-            cardsContainer.children[0].innerHTML = 
-            `<img src = ${data.cards[0].image} class = "card" />`
-            cardsContainer.children[1].innerHTML = 
-             `<img src = ${data.cards[1].image} class = "card" />`
-            const winnerText = determineCardWinner(data.cards[0], data.cards[1])
+
+
+drawCard.addEventListener("click", async() =>{
+    const res = await fetch(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`)
+    const data = await res.json()
+        remainingText.textContent = `Remaining cards ${data.remaining}`
+        cardsContainer.children[0].innerHTML = 
+        `<img src = ${data.cards[0].image} class = "card" />`
+        cardsContainer.children[1].innerHTML = 
+        `<img src = ${data.cards[1].image} class = "card" />`
+        const winnerText = determineCardWinner(data.cards[0], data.cards[1])
             header.textContent = winnerText;
 
-            if (data.remaining === 0){
-                drawCard.disabled = true;
-                if(computerScore > yourScore){
-                    header.textContent = "The Computer Won the Game!"
+        if (data.remaining === 0){
+            drawCard.disabled = true;
+            if(computerScore > yourScore){
+                header.textContent = "The Computer Won the Game!"
                     
-                    
+            }else if(
+                yourScore > computerScore){
+                header.textContent = "You Won the Game!"
                    
-                }else if(
-                    yourScore > computerScore){
-                    header.textContent = "You Won the Game!"
-                   
-                   
-                    }
-                else{
+            }else{
                     header.textContent = "It's a tie!"
-                   
-                    
-                }
-                resetGame();
-               
-                
-               
-                
-
-                
             }
+            resetGame();
+        }
+
+    });
+            
             
 
-        })
 
-})
 
+    
 function determineCardWinner(card1, card2){
     const valueOptions = ["2","3","4","5","6","7","8","9","10","JACK", 
     "QUEEN", "KING", "ACE"]
